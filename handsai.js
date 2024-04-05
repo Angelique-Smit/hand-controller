@@ -190,10 +190,6 @@ function getLabelValue() {
     if (!labelValue) {
       const errorMessage = "Please enter a label for the pose";
       console.warn(errorMessage);
-  
-      // write the message to the page
-      writeErrorsToPage(errorMessage);
-      return;
     }
     return labelValue;
 }

@@ -6,8 +6,39 @@
     <title>Document</title>
 
     <script src="./js/app.js" type="module"></script>
+
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <button id="train"> Train AI</button>
+    <section class="container">
+        <section id="demos" class="invisible">
+            <div id="liveView" class="videoView container2">
+                <div>
+                    <button id="webcamButton" class="mdc-button mdc-button--raised 1vh">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">ENABLE WEBCAM</span>
+                    </button>
+                </div>
+
+                <div>
+                    <button class="mdc-button mdc-button--raised 1vh" id="train"> Train AI</button>
+                </div>
+
+                <div>
+                    <button class="mdc-button mdc-button--raised 1vh" id="label"> Make the AI guess what pose you do</button>
+                </div>
+
+                <div style="position: relative;">
+                    <video id="webcam" style="position: abso" autoplay playsinline></video>
+                    <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+                </div>
+            </div>
+        </section>
+    </section>
 </body>
 </html>
