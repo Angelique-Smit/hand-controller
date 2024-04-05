@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="handsai.js" type="module"></script>
+
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="container">
+        <section id="demos" class="invisible">
+            <div id="liveView" class="videoView container2">
+                <div>
+                    <button id="webcamButton" class="mdc-button mdc-button--raised 1vh">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">ENABLE WEBCAM</span>
+                    </button>
+
+                    <div class="container vh1">
+                        <label for="label" class="vh2">Label pose</label>
+                        <input type="text" id="label" class="vh1" required> 
+                        <button id="posebutton" class="mdc-button mdc-button--raised vh1"> Save pose</button>
+                    </div>
+
+                    <button id="downloadPoses" class="mdc-button mdc-button--raised 1vh"> Download all poses</button>
+                </div>
+
+                <div style="position: relative;">
+                    <video id="webcam" style="position: abso" autoplay playsinline></video>
+                    <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+                </div>
+            </div>
+        </section>
+    </section>
+</body>
+</html>
