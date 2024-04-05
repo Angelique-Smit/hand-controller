@@ -1,26 +1,33 @@
 //AI KNN
-import kNear from "./knear.js"
+//import kNear from "./knear.js"
 
-const k = 3;
-const machine = new kNear(k);
+const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
 
 document.getElementById("train").addEventListener("click", fetchTrainingData);
 
 function fetchTrainingData() {
-    fetch("./testdata.json")
-        .then((res) => res.json())
-        .then((data) => trainAI(data))
+  fetch("./testdata.json")
+      .then((res) => res.json())
+      .then((data) => trainAI(data))
 }
 
 async function trainAI(data) {
-    console.log(data)
-    for (let i=0; i < data.length; i++) {
-        let singlePose = data[i];
+let useThisData = data.data;
 
-        for (let j=0; j < singlePose.vector.length; j++) {
-            machine.learn(singlePose.vector[j], singlePose.label)
-        }
-    }
+  for (let i=0; i < useThisData.length; i++) {
+      let singlePose = useThisData[i];
+      let label = singlePose.label
+
+      nn.addData(singlePose.vector, { label })
+  }
+
+
+  nn.normalizeData()
+  await nn.train({ epochs: 70 }, () => finishedTraining())
+}
+
+async function finishedTraining(){
+  console.log("Finished training!")
 }
   
 //alles uit de app.js dat belangrijk is voor dit
@@ -182,14 +189,16 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
 
 document.getElementById("label").addEventListener("click", capturePose);
 
-function guessLabel (labelThis) {
+async function guessLabel (labelThis) {
     if (!labelThis) {
         const errorMessage = "No vector data has been found. Please try again."
         console.warn(errorMessage);
     }
 
-    let prediction = machine.classify(labelThis.vector)
+    let prediction = await nn.classify(labelThis.vector);
     console.log(prediction)
+    console.log(prediction[0].label)
+    console.log(prediction[0].confidence)
 
 }
 
@@ -214,4 +223,10 @@ function capturePose() {
     console.log(labelThis.vector)
 
     guessLabel(labelThis);
+}
+
+document.getElementById("saveModel").addEventListener("click", saveModel);
+
+function saveModel () {
+  nn.save("model", () => console.log("model was saved!"))
 }
