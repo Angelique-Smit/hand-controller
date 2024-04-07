@@ -1,0 +1,46 @@
+import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
+import { Actor, Vector, Input, Timer } from "excalibur";
+import { Resources, ResourceLoader } from "./resources.js";
+import { capturePose } from './handControllerAI.js';
+
+export class Player extends Actor {
+    constructor() {
+        super();
+        this.graphics.use(Resources.Fish.toSprite());
+        this.pos = new Vector(20, 200);
+        this.vel = new Vector(0, 0)
+    }
+
+    async onPreUpdate() {
+      let movement = await this.getLabel()
+      console.log("this is the movement")
+      console.log(movement)
+
+      let xspeed = 0;
+      let yspeed = 0;
+
+      if (movement == "up") {
+        yspeed = -10;
+      }
+
+      if (movement == "down") {
+        yspeed = 10
+      }
+
+      if (movement == "run-left") {
+        xspeed = -10
+      }
+
+      if (movement == "run-right") {
+        xspeed = 10
+      }
+      this.vel = new Vector(xspeed, yspeed);
+    }
+
+    async getLabel() {
+      let label = await capturePose();
+      // console.log("label")
+      // console.log(label)
+      return label
+    }
+}

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <script src="./js/app.js" type="module"></script>
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
@@ -13,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
+    <script src="./js/app.js" type="module"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -33,6 +33,10 @@
 
                     <div class="vh1">
                         <button class="mdc-button mdc-button--raised" id="label"> Make the AI guess what pose you do</button>
+                    </div>
+
+                    <div class="vh1">
+                        <button class="mdc-button mdc-button--raised" id="test"> Test AI with a full dataset</button>
                     </div>
 
                     <div class="vh1">

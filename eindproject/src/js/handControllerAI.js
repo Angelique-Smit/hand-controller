@@ -1,40 +1,8 @@
-const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
-
-document.getElementById("train").addEventListener("click", fetchTrainingData);
-
-function fetchTrainingData() {
-  fetch("./learndata2.json")
-      .then((res) => res.json())
-      .then((data) => trainAI(data))
-}
-
-async function trainAI(data) {
-let useThisData = data.data;
-
-  for (let i=0; i < useThisData.length; i++) {
-      let singlePose = useThisData[i];
-      let label = singlePose.label
-
-      nn.addData(singlePose.vector, { label })
-  }
-
-    const trainingOptions = {
-      epochs: 50,
-      learningRate: 0.8,
-      hiddenUnits: 4,
-    }
-
-  nn.normalizeData()
-  await nn.train(trainingOptions, () => finishedTraining())
-}
-
-async function finishedTraining(){
-  console.log("Finished training!")
-}
-  
-//alles uit de app.js dat belangrijk is voor dit
-
 import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
+
+
+// EXCALIBURRRRRRRRRRRR, EXCALIBURRRRRRRRRRRRRR From the United Kingdom! I'm looking for heaven! I'm going to California!
+
   
   const demosSection = document.getElementById("demos");
   
@@ -43,6 +11,15 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
   let enableWebcamButton;
   let webcamRunning = false;
 
+  const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
+  const modelDetails = {
+    model: './model/GOD_MODEL.json',
+    metadata: './model/GOD_MODEL_meta.json',
+    weights: './model/GOD_MODEL.weights.bin'
+  }
+  nn.load(modelDetails, () => {
+    console.log("het model is geladen pookie!")
+  })
   
   const createHandLandmarker = async () => {
     const vision = await FilesetResolver.forVisionTasks( "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
@@ -149,7 +126,7 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
   let results = undefined;
   console.log(video);
   async function predictWebcam() {
-    canvasElement.style.width = video.videoWidth;
+    canvasElement.style.width = video.videoWidth;;
     canvasElement.style.height = video.videoHeight;
     canvasElement.width = video.videoWidth;
     canvasElement.height = video.videoHeight;
@@ -187,95 +164,48 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
     }
   }
 
-// Now onto the actual guessing of the pose/hand (I called it label for short)
-
-document.getElementById("label").addEventListener("click", capturePose);
-
 async function guessLabel (labelThis) {
-    if (!labelThis) {
-        const errorMessage = "No vector data has been found. Please try again."
-        console.warn(errorMessage);
-    }
+  if (!labelThis) {
+      const errorMessage = "No vector data has been found. Please try again."
+      console.warn(errorMessage);
+      return null; 
+  }
 
-    let prediction = await nn.classify(labelThis.vector);
-    console.log(prediction)
-    console.log(prediction[0].label)
-    console.log(prediction[0].confidence)
+  let prediction = await nn.classify(labelThis.vector);
+  // console.log(prediction)
+  // console.log(prediction[0].label)
+  // console.log(prediction[0].confidence)
 
+  let label = prediction[0].label
+  // console.log("label")
+  // console.log(label)
+  return label; 
 }
 
 function convertPoseToVector(pose) {
-    return pose
-      .map((point) => {
-        return [point.x, point.y];
-      })
-      .flat();
+  return pose
+    .map((point) => {
+      return [point.x, point.y];
+    })
+    .flat();
 }
 
-function capturePose() {
-    if (!results) {
-        const errorMessage = "No visible pose detected. Please make sure to enable your webcam before you try to save a pose";
-        console.warn(errorMessage);
-    }
-
-    const labelThis = {
-        vector: convertPoseToVector(results.landmarks[0]),
-    };
-
-    console.log(labelThis.vector)
-
-    guessLabel(labelThis);
-}
-
-document.getElementById("saveModel").addEventListener("click", saveModel);
-
-function saveModel () {
-  nn.save()
-  //"model", () => console.log("model was saved!")
-}
-
-document.getElementById("test").addEventListener("click", fetchTest);
-
-function fetchTest() {
-  fetch("./testdata2.json")
-      .then((res) => res.json())
-      .then((data) => testModel(data))
-}
-
-async function testModel(data) {
-  let useThisData = data.data;
-  let totalGuesses = data.data.length
-  let goodGuesses = 0;
-  let badGuesses = 0;
-  let badGuessesIndexNumbers = [];
-  let badGuessesPoses = [];
-  
-
-  for (let i=0; i < useThisData.length; i++) {
-      let singlePose = useThisData[i];
-      let prediction = await nn.classify(singlePose.vector)
-      // Turned off to prevent console spam
-      // console.log(prediction[0].label)
-      // console.log(prediction[0].confidence)
-      // console.log(prediction)
-
-      if (singlePose.label == prediction[0].label) {
-        goodGuesses++
-      } else {
-        badGuesses++
-        let badGuessIndex = i
-        let badGuessLabel = singlePose.label
-        badGuessesIndexNumbers.push(badGuessIndex);
-        badGuessesPoses.push(badGuessLabel);
-      }
+async function capturePose() {
+  if (!results) {
+      const errorMessage = "No visible pose detected. Please make sure to enable your webcam before you try to save a pose";
+      console.warn(errorMessage);
+      return; 
   }
 
-  finishedTesting(goodGuesses, badGuesses, totalGuesses, badGuessesIndexNumbers, badGuessesPoses)
+  const labelThis = {
+      vector: convertPoseToVector(results.landmarks[0]),
+  };
+
+  console.log(labelThis.vector)
+
+  let label = await guessLabel(labelThis);
+  console.log(label)
+  return label;
 }
 
-function finishedTesting(goodGuesses, badGuesses, totalGuesses, badGuessesIndexNumbers, badGuessesPoses) {
-  let accuracy = goodGuesses/totalGuesses * 100
-  console.log("Finished training! This model is " + accuracy + "%" + " accurate with a total guesses of:" + totalGuesses + " Good guesses: " + goodGuesses + " Bad guesses " + badGuesses)
-  console.log("The index numbers it got wrong in testing were:" + badGuessesIndexNumbers)
-  console.log("The poses it got wrong in testing were:" + badGuessesPoses)
-}
+export { guessLabel, capturePose };
