@@ -27,8 +27,28 @@ export class Player extends Actor {
         yspeed = 10
       }
 
+      if (movement == "run-down-left") {
+        xspeed = -10
+        yspeed = 10
+      }
+
+      if (movement == "run-down-right") {
+        xspeed = 10
+        yspeed = 10
+      }
+
+      if (movement == "run-up-left") {
+        xspeed = -10
+        yspeed = -10
+      }
+
       if (movement == "run-left") {
         xspeed = -10
+      }
+
+      if (movement == "run-up-right") {
+        xspeed = 10
+        yspeed = -10
       }
 
       if (movement == "run-right") {

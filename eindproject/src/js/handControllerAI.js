@@ -13,9 +13,9 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
 
   const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
   const modelDetails = {
-    model: './model/GOD_MODEL.json',
-    metadata: './model/GOD_MODEL_meta.json',
-    weights: './model/GOD_MODEL.weights.bin'
+    model: './model/model.json',
+    metadata: './model/model_meta.json',
+    weights: './model/model.weights.bin'
   }
   nn.load(modelDetails, () => {
     console.log("het model is geladen pookie!")
