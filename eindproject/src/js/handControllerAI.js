@@ -12,6 +12,7 @@ import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@m
   let webcamRunning = false;
 
   const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
+  ml5.setBackend("webgl");
   const modelDetails = {
     model: './model/model.json',
     metadata: './model/model_meta.json',

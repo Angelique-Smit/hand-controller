@@ -1,7 +1,7 @@
 const nn = ml5.neuralNetwork({ task: 'classification', debug: true })
 
 document.getElementById("train").addEventListener("click", fetchTrainingData);
-
+ml5.setBackend("webgl");
 function fetchTrainingData() {
   fetch("./learndata2.json")
       .then((res) => res.json())
@@ -9,6 +9,7 @@ function fetchTrainingData() {
 }
 
 async function trainAI(data) {
+
 let useThisData = data.data;
 
   for (let i=0; i < useThisData.length; i++) {
@@ -19,9 +20,9 @@ let useThisData = data.data;
   }
 
     const trainingOptions = {
-      epochs: 50,
-      learningRate: 0.8,
-      hiddenUnits: 4,
+      epochs: 28,
+      learningRate: 0.4,
+      hiddenUnits: 200,
     }
 
   nn.normalizeData()

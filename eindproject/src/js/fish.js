@@ -20,39 +20,39 @@ export class Player extends Actor {
       let yspeed = 0;
 
       if (movement == "up") {
-        yspeed = -10;
+        yspeed = -40;
       }
 
       if (movement == "down") {
-        yspeed = 10
+        yspeed = 40
       }
 
       if (movement == "run-down-left") {
-        xspeed = -10
-        yspeed = 10
+        xspeed = -40
+        yspeed = 40
       }
 
       if (movement == "run-down-right") {
-        xspeed = 10
-        yspeed = 10
+        xspeed = 40
+        yspeed = 40
       }
 
       if (movement == "run-up-left") {
-        xspeed = -10
-        yspeed = -10
+        xspeed = -40
+        yspeed = -40
       }
 
       if (movement == "run-left") {
-        xspeed = -10
+        xspeed = -40
       }
 
       if (movement == "run-up-right") {
-        xspeed = 10
-        yspeed = -10
+        xspeed = 40
+        yspeed = -40
       }
 
       if (movement == "run-right") {
-        xspeed = 10
+        xspeed = 40
       }
       this.vel = new Vector(xspeed, yspeed);
     }
